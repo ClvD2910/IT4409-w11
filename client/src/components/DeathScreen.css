@@ -1,0 +1,212 @@
+/* DeathScreen.css — Space Theme */
+.death-screen-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(ellipse at 30% 40%, rgba(45, 27, 105, 0.5) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 60%, rgba(14, 26, 74, 0.4) 0%, transparent 50%),
+        linear-gradient(rgba(2, 2, 12, 0.8), rgba(2, 2, 9, 0.85)),
+        url('/Backgrounds/public.avif');
+    background-size: cover;
+    background-position: center;
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 100;
+    font-family: 'Rajdhani', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Title - matching arena-title position */
+.death-title {
+    font-size: 64px;
+    font-weight: 900;
+    color: #FFF;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    font-family: 'Orbitron', monospace;
+    text-shadow: 0 0 30px rgba(0, 229, 255, 0.3), 0 0 60px rgba(180, 79, 255, 0.2);
+    text-transform: uppercase;
+}
+
+/* Subtitle - Victory/Defeated */
+.death-subtitle {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.death-subtitle.victory-text {
+    color: #00e5ff;
+    text-shadow: 0 0 30px rgba(0, 229, 255, 0.7), 0 0 60px rgba(0, 229, 255, 0.3);
+}
+
+.death-subtitle.defeated-text {
+    color: #FF4444;
+    text-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+}
+
+/* Combined content box */
+.death-content-box {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(4, 8, 30, 0.75) 0%, rgba(8, 4, 28, 0.75) 100%);
+    padding: 40px 60px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 229, 255, 0.18);
+    box-shadow:
+        0 0 40px rgba(0, 229, 255, 0.06),
+        0 0 80px rgba(180, 79, 255, 0.06),
+        0 20px 50px rgba(0, 0, 0, 0.5);
+    min-width: 400px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Info row - Eliminated by / Victory message */
+.death-info-row {
+    font-size: 20px;
+    color: #aaa;
+    letter-spacing: 1px;
+}
+
+.death-info-row.victory-info {
+    color: #00e5ff;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+}
+
+.death-info-row.defeated-info {
+    color: #FF6B6B;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.killer-name {
+    color: #b44fff;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(180, 79, 255, 0.5);
+}
+
+/* Divider between sections */
+.death-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 25px 0;
+}
+
+/* Score/Rank row */
+.death-score-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Label text - BIGGER like countdown text */
+.stat-label {
+    font-size: 20px !important;
+    color: #dedede !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.stat-value {
+    font-size: 64px !important;
+    font-weight: 900 !important;
+    color: #00e5ff !important;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(0, 229, 255, 0.5), 0 0 60px rgba(0, 229, 255, 0.2) !important;
+    font-family: 'Orbitron', monospace !important;
+}
+
+/* Result text - Victory/Defeated */
+.result-text {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.result-text.victory-text {
+    color: #00e5ff;
+    text-shadow: 0 0 30px rgba(0, 229, 255, 0.7), 0 0 60px rgba(0, 229, 255, 0.3);
+}
+
+.result-text.defeated-text {
+    color: #FF4444;
+    text-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+}
+
+/* Random Quote - inside box, centered */
+.death-quote {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    max-width: 350px;
+    line-height: 1.5;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* Buttons */
+.death-btn-group {
+    display: flex;
+    gap: 20px;
+}
+
+.death-btn {
+    padding: 16px 40px;
+    font-size: 15px;
+    font-weight: 700;
+    background: rgba(4, 8, 30, 0.6);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    color: #7a8ab0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.respawn-btn:hover {
+    border-color: #00e5ff;
+    color: #00e5ff;
+    background: rgba(0, 229, 255, 0.08);
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+}
+
+.quit-btn:hover {
+    border-color: #ff3b3b;
+    color: #ff3b3b;
+    background: rgba(255, 59, 59, 0.08);
+    box-shadow: 0 0 16px rgba(255, 59, 59, 0.3);
+}
+
+/* Victory Mode */
+.victory-mode {
+    background:
+        radial-gradient(ellipse at 30% 40%, rgba(0, 100, 120, 0.4) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 60%, rgba(0, 60, 100, 0.3) 0%, transparent 50%),
+        linear-gradient(rgba(0, 10, 30, 0.85), rgba(0, 5, 20, 0.9)),
+        url('/Backgrounds/public.avif') !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+.victory-text {
+    color: #00e5ff !important;
+    text-shadow: 0 0 30px rgba(0, 229, 255, 0.7) !important;
+}

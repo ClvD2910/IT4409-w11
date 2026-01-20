@@ -1,0 +1,228 @@
+// src/game/scenes/BaseScene.js
+import Phaser from 'phaser';
+import { socket } from '../../network/socket';
+import { PacketType } from 'shared/packetTypes';
+import { ClientPlayer } from '../entities/ClientPlayer';
+import { WEAPON_STATS, MAP_SIZE } from 'shared/constants';
+import { InputManager } from '../InputManager';
+import { EntityManager } from '../EntityManager';
+import { SoundManager } from '../SoundManager';
+
+export class BaseScene extends Phaser.Scene {
+    constructor(key) {
+        super(key);
+        this.players = {};
+        this.entityManager = null;
+        this.inputManager = null;
+        this.soundManager = null;
+        this.rangeCircle = null;
+        this.isArena = false; // Mặc định là Endless
+
+        // Visual Asteroids
+        this.visualAsteroids = [];
+    }
+
+    preload() {
+        // Assets are now loaded in BootScene
+    }
+
+    create() {
+        // 1. Setup Background chung
+        const bg = this.add.tileSprite(0, 0, MAP_SIZE, MAP_SIZE, 'background');
+        bg.setDepth(-100);
+
+        // 2. Initialize Managers
+        this.entityManager = new EntityManager(this);
+        this.inputManager = new InputManager(this);
+        this.soundManager = new SoundManager(this);
+
+        // Start Engine Sound (muted initially)
+        // Note: BGM is now handled globally by BackgroundMusic.jsx
+        this.soundManager.startEngine();
+
+        // 3. UI Helpers
+        this.createRangeCircle();
+        this.createVisualAsteroidBelt();
+
+        // 4. Hook socket
+        // 4. Hook socket
+        socket.setGameScene(this);
+
+        // Notify App.jsx that game is ready
+        this.registry.get('notifyReady')?.();
+
+        // 5. Cleanup on shutdown
+        this.events.on('shutdown', () => {
+            if (this.soundManager) {
+                this.soundManager.destroy();
+            }
+        });
+    }
+
+    update(time, delta) {
+        if (!socket.isConnected) return;
+        const dt = delta / 1000;
+
+        // Update Players
+        Object.values(this.players).forEach(player => {
+            if (player.tick) player.tick(dt);
+        });
+
+        // Update Range Circle
+        this.updateRangeCircle();
+
+        // Send Input
+        const inputData = this.inputManager.getInputData();
+        socket.send({ type: PacketType.INPUT, data: inputData });
+
+        // Update Engine Sound
+        if (this.soundManager && socket.myId && this.players[socket.myId]) {
+            const isThrusting = this.inputManager.keys.W.isDown || this.inputManager.keys.UP.isDown;
+            this.soundManager.updateEngine(isThrusting);
+        }
+
+        // Extrapolate projectile positions every frame (smooth 60fps motion between 20Hz server updates)
+        if (this.entityManager) this.entityManager.tickProjectiles(dt);
+
+        // Update Visual Asteroids (every 3 frames to reduce trig cost)
+        this._asteroidFrameCount = (this._asteroidFrameCount || 0) + 1;
+        if (this._asteroidFrameCount % 3 === 0) {
+            this.updateVisualAsteroids(dt * 3);
+        }
+    }
+
+    // --- LOGIC XỬ LÝ SERVER CHUNG ---
+
+    initGame(data) {
+        // Xử lý Players
+        if (data.players) {
+            data.players.forEach(p => this.updateOrAddPlayer(p));
+        }
+
+        // Xử lý Entities (Food, Obstacles, Chests...)
+        this.entityManager.updateFoods({ foods: data.foods });
+        this.entityManager.initObstacles(data.obstacles);
+        this.entityManager.initNebulas(data.nebulas);
+        this.entityManager.initWormholes(data.wormholes);
+        this.entityManager.updateChests({ chests: data.chests });
+        this.entityManager.updateItems({ items: data.items });
+
+        // Camera Follow
+        if (this.players[data.id]) {
+            this.cameras.main.startFollow(this.players[data.id].container);
+        }
+    }
+
+    handleServerUpdate(packet) {
+        // Sync Players
+        if (packet.players) {
+            packet.players.forEach(p => this.updateOrAddPlayer(p));
+        }
+
+        // Camera check
+        if (socket.myId && this.players[socket.myId] && !this.cameras.main._follow) {
+            this.cameras.main.startFollow(this.players[socket.myId].container);
+        }
+
+        // Delegate cho EntityManager (Đã bao gồm fix lỗi Chest ma ở đây)
+        this.entityManager.updateFoods(packet);
+        this.entityManager.updateProjectiles(packet.projectiles);
+        this.entityManager.updateExplosions(packet.explosions);
+        this.entityManager.updateChests(packet);
+        this.entityManager.updateItems(packet);
+        this.entityManager.updateHitEffects(packet.hitEffects);
+    }
+
+    // --- CÁC HÀM PLAYER HELPER ---
+    updateOrAddPlayer(pData) {
+        const player = this.players[pData.id];
+        if (player) {
+            if (player.updateServerData) player.updateServerData(pData);
+        } else {
+            this.players[pData.id] = new ClientPlayer(this, pData);
+        }
+    }
+
+    addPlayer(playerData) {
+        if (!this.players[playerData.id]) {
+            this.players[playerData.id] = new ClientPlayer(this, playerData);
+        }
+    }
+
+    removePlayer(id) {
+        if (this.players[id]) {
+            this.players[id].destroy();
+            delete this.players[id];
+        }
+    }
+
+    createRangeCircle() {
+        this.rangeCircle = this.add.circle(0, 0, 100, 0xFFFFFF, 0);
+        this.rangeCircle.setStrokeStyle(2, 0xFFFFFF, 0.3);
+        this.rangeCircle.setDepth(10);
+    }
+
+    updateRangeCircle() {
+        const myPlayer = this.players[socket.myId];
+        if (myPlayer && myPlayer.container.visible) {
+            const weaponType = myPlayer.weaponType || 'BLUE';
+
+            // RED laser có tầm bắn quá lớn (1000px) -> không vẽ range circle
+            if (weaponType === 'RED') {
+                this.rangeCircle.setVisible(false);
+                return;
+            }
+
+            const stats = WEAPON_STATS[weaponType] || WEAPON_STATS.BLUE;
+            this.rangeCircle.setPosition(myPlayer.x, myPlayer.y);
+            this.rangeCircle.setRadius(stats.range);
+            this.rangeCircle.setVisible(true);
+            this.rangeCircle.setStrokeStyle(2, myPlayer.isMoving && stats.requireStill ? 0xFF0000 : 0xFFFFFF, 0.5);
+        } else {
+            this.rangeCircle.setVisible(false);
+        }
+    }
+
+    // --- VISUAL ASTEROID BELT ---
+    createVisualAsteroidBelt() {
+        const count = 40; // Medium number
+        const textures = [
+            'meteorBrown_tiny1', 'meteorBrown_tiny2',
+            'meteorGrey_tiny1', 'meteorGrey_tiny2'
+        ]; // Using tiny sprites
+
+        for (let i = 0; i < count; i++) {
+            const tex = Phaser.Math.RND.pick(textures);
+            // Create sprite but don't add to physics or entity manager
+            const sprite = this.add.image(0, 0, tex);
+            sprite.setDepth(-50); // Background layer (above bg, below game objects)
+
+            // Random orbit parameters
+            const r = Phaser.Math.RND.realInRange(1500, 3500); // Large radius around (0,0)
+            const theta = Phaser.Math.RND.realInRange(0, Math.PI * 2);
+            const speed = Phaser.Math.RND.realInRange(0.02, 0.05) * (Math.random() < 0.5 ? 1 : -1); // Slow orbital speed
+
+            this.visualAsteroids.push({
+                sprite,
+                r,
+                theta,
+                speed,
+                rotationSpeed: Phaser.Math.RND.realInRange(-1, 1) // Personal rotation
+            });
+        }
+    }
+
+    updateVisualAsteroids(dt) {
+        this.visualAsteroids.forEach(asteroid => {
+            // Update orbital angle
+            asteroid.theta += asteroid.speed * dt * 0.5; // *0.5 to make it very slow
+
+            // Polar to Cartesian
+            asteroid.sprite.x = Math.cos(asteroid.theta) * asteroid.r;
+            asteroid.sprite.y = Math.sin(asteroid.theta) * asteroid.r;
+
+            // Self rotation
+            asteroid.sprite.rotation += asteroid.rotationSpeed * dt;
+        });
+    }
+}
