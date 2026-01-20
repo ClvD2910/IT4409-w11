@@ -568,10 +568,6 @@ export class EntityManager {
         if (packet.itemsAdded) {
             packet.itemsAdded.forEach(itemData => {
                 const id = String(itemData.id);
-
-                // === [FIX LOGIC GHOST ITEM] ===
-                // Nếu item này vừa sinh ra mà đã nằm trong danh sách bị xóa (removedIds)
-                // Nghĩa là nó bị ăn ngay trong cùng 1 frame -> ĐỪNG VẼ NÓ RA
                 if (removedIds.has(id)) {
                     return; // Bỏ qua, không tạo sprite
                 }

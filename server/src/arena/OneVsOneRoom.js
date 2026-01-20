@@ -23,13 +23,6 @@ export class OneVsOneRoom extends ArenaRoom {
     startGame() {
         super.startGame();
 
-        // Configure swift zone phases for 1v1
-        // We act directly on the zoneManager's state or config if possible.
-        // Since ArenaZoneManager reads from ARENA_CONFIG constant, we might need to override behavior 
-        // or just accept global config.
-        // Ideally we should have instance-based config.
-
-        // For now, let's just forcefully set the zone to be smaller immediately.
         this.zoneManager.resetForGame();
         this.zoneManager.zone.radius = this.initialZoneRadius;
         this.zoneManager.zone.targetRadius = this.initialZoneRadius * 0.8;

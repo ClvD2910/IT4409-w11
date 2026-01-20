@@ -34,9 +34,7 @@ export class Bot extends Player {
         this.currentState = 'WANDER';
         this.spritePointsDown = true;
 
-        // ========================================
         // ZONE AVOIDANCE SETTINGS
-        // ========================================
         this.zoneAwareness = 0.8 + Math.random() * 0.2;
         this.panicThreshold = 0.75;
         this.dangerThreshold = 0.9;
@@ -45,18 +43,14 @@ export class Bot extends Player {
     think(game) {
         if (this.dead) return;
 
-        // ========================================
         // PRIORITY 1: ZONE AVOIDANCE (Arena mode only - life threatening)
-        // ========================================
         const zoneStatus = this.checkZoneStatus(game);
         if (zoneStatus.inDanger) {
             this.handleZoneDanger(zoneStatus);
             return;
         }
 
-        // ========================================
         // PRIORITY 2: FIND/VALIDATE TARGET (Player detection)
-        // ========================================
         if (this.target) {
             let targetPlayer = null;
 
@@ -79,9 +73,7 @@ export class Bot extends Player {
             this.findTarget(game);
         }
 
-        // ========================================
         // PRIORITY 3: CHASE PLAYER (if target exists)
-        // ========================================
         if (this.target) {
             if (zoneStatus.needsAttention) {
                 this.engageTargetWithZoneAwareness(game, zoneStatus);
@@ -91,18 +83,15 @@ export class Bot extends Player {
             return;
         }
 
-        // ========================================
+
         // PRIORITY 4: ESCAPE WORMHOLE (if no player to chase)
-        // ========================================
         const wormholeStatus = this.checkWormholeProximity(game);
         if (wormholeStatus.inDanger) {
             this.escapeWormhole(wormholeStatus);
             return;
         }
 
-        // ========================================
         // PRIORITY 5: WANDER (nothing else to do)
-        // ========================================
         if (zoneStatus.needsAttention) {
             this.moveTowardsSafeZone(zoneStatus);
         } else {
@@ -110,9 +99,7 @@ export class Bot extends Player {
         }
     }
 
-    // ========================================
     // WORMHOLE ESCAPE LOGIC
-    // ========================================
 
     checkWormholeProximity(game) {
         const wormholes = game.worldManager?.wormholes || [];
@@ -167,9 +154,7 @@ export class Bot extends Player {
         this.input.space = false;
     }
 
-    // ========================================
     // ZONE AVOIDANCE LOGIC
-    // ========================================
 
     checkZoneStatus(game) {
         const zone = game.zone;
@@ -280,10 +265,6 @@ export class Bot extends Player {
             this.moveTowardsSafeZone(zoneStatus);
         }
     }
-
-    // ========================================
-    // ORIGINAL COMBAT LOGIC
-    // ========================================
 
     findTarget(game) {
         let closestDist = Infinity;

@@ -19,10 +19,34 @@
 .home-header {
     position: absolute;
     top: 20px;
+    left: 20px;
     right: 20px;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 10px;
     z-index: 10;
+}
+
+.header-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow:
+        0 0 10px #00e5ff,
+        0 0 25px rgba(0, 229, 255, 0.8),
+        0 0 50px rgba(0, 229, 255, 0.4);
+    letter-spacing: 2px;
+    user-select: none;
+}
+
+.header-logo span {
+    color: #d0aaff;
+    text-shadow:
+        0 0 10px #b388ff,
+        0 0 25px rgba(179, 136, 255, 0.8),
+        0 0 50px rgba(179, 136, 255, 0.4);
 }
 
 .auth-btn {
@@ -238,7 +262,7 @@
 /* Menu Card */
 .menu-card-container {
     position: absolute;
-    bottom: 20px;
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -697,20 +721,6 @@
     font-weight: 600;
 }
 
-/* Credits */
-.credits-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.credit-item {
-    padding: 10px 16px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 6px;
-    font-size: 14px;
-}
-
 /* Account Info */
 .account-info {
     display: flex;
@@ -811,13 +821,6 @@
     border-radius: 4px;
     color: #fff;
     font-size: 13px;
-}
-
-.credits-compact {
-    display: flex;
-    gap: 20px;
-    font-size: 13px;
-    color: #888;
 }
 
 /* Account Compact */
@@ -1233,32 +1236,6 @@
     color: #FF4444;
 }
 
-/* Version Text */
-.version-text {
-    position: fixed;
-    bottom: 15px;
-    left: 20px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #FFD700;
-    z-index: 5;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-    text-align: center;
-}
-
-.version-number {
-    font-size: 16px;
-    margin-bottom: 2px;
-}
-
-.developer-text {
-    font-size: 15px;
-    font-weight: 400;
-    color: #666;
-    margin-top: 2px;
-    text-shadow: none;
-}
-
 /* Tips List */
 .tips-list {
     display: flex;
@@ -1272,18 +1249,6 @@
     border-left: 2px solid #FFD700;
     font-size: 13px;
     color: #aaa;
-}
-
-/* Credits Row */
-.credits-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.credits-row span:last-child {
-    color: #FFD700;
-    font-weight: 600;
 }
 
 /* Account Form Styles */

@@ -143,7 +143,7 @@ const LoginScreen = ({ onLoginSuccess }) => {
     return (
         <div className="login-screen-overlay">
             <div className="login-card">
-                <h1 className="login-title">MY IO GAME</h1>
+                <h1 className="login-title">SpaceCraft.io</h1>
 
                 {/* TABS */}
                 <div className="login-tabs">

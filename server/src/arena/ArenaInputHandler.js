@@ -1,4 +1,3 @@
-// server/src/arena/ArenaInputHandler.js
 
 /**
  * Handles player input for Arena mode

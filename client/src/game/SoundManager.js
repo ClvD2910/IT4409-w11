@@ -130,11 +130,7 @@ export class SoundManager {
 
     // New method for applying items (powerups)
     playItemApply(itemType) {
-        // Use pickup sound but with different pitch/rate to distinguish
-        // OR reuse other sounds if available. "win" is too long.
-        // Let's use 'pickup' with lower rate for "activation" feel
-        // or 'shield' procedural if I had it.
-        // Let's try 'pickup' with a pitch down for "consumption" effect.
+
         this.playSound('pickup', { rate: 0.8, volume: 0.7 });
     }
 

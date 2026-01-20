@@ -3,10 +3,7 @@ export class AssetLoader {
         // Load ship sprites
         scene.load.image('ship_default', '/Ships/playerShip1_red.png');
         for (let i = 1; i <= 9; i++) {
-            // Logic load ship_1 -> ship_9 có thể dùng loop nếu tên file có quy luật, 
-            // nhưng ở đây tên file không đồng nhất hoàn toàn nên ta map thủ công hoặc giữ nguyên list cũ cho an toàn
         }
-        // Để ngắn gọn, tôi giữ lại các lệnh load quan trọng:
         scene.load.image('ship_1', '/Ships/playerShip2_red.png');
         scene.load.image('ship_2', '/Ships/playerShip3_red.png');
         scene.load.image('ship_3', '/Ships/ufoRed.png');

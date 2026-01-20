@@ -50,9 +50,7 @@ export class ArenaRoom {
         this.startWaitTimer();
     }
 
-    // ========================================
     // PLAYER MANAGEMENT (Delegated)
-    // ========================================
 
     get players() { return this.playerManager.players; }
     get clientIds() { return this.playerManager.clientIds; }
@@ -122,9 +120,7 @@ export class ArenaRoom {
     getAliveBotCount() { return this.playerManager.getAliveBotCount(); }
     getTotalAliveCount() { return this.playerManager.getTotalAliveCount(); }
 
-    // ========================================
     // ZONE MANAGEMENT (Delegated)
-    // ========================================
 
     checkZoneDamage(dt) {
         this.playerManager.forEach(player => {
@@ -186,9 +182,7 @@ export class ArenaRoom {
         this.checkGameEnd();
     }
 
-    // ========================================
     // GAME FLOW
-    // ========================================
 
     startWaitTimer() {
         this.waitUpdateInterval = setInterval(() => {
@@ -317,9 +311,7 @@ export class ArenaRoom {
         this.explosions.push(explosion);
     }
 
-    // ========================================
     // GAME END
-    // ========================================
 
     endGameByTime() {
         this.status = 'ended';
@@ -433,9 +425,7 @@ export class ArenaRoom {
         this.manager.removeRoom(this.id);
     }
 
-    // ========================================
     // INPUT HANDLERS (Delegated)
-    // ========================================
 
     handleInput(clientId, inputData) {
         ArenaInputHandler.handleInput(this, clientId, inputData);
@@ -457,9 +447,7 @@ export class ArenaRoom {
         ArenaInputHandler.handleDash(this, clientId);
     }
 
-    // ========================================
     // STATS (Delegated)
-    // ========================================
 
     async savePlayerScore(player) {
         await ArenaStatsHandler.savePlayerScore(player, this.server);
@@ -473,9 +461,7 @@ export class ArenaRoom {
         await ArenaStatsHandler.savePlayerRanking(player, rank, this);
     }
 
-    // ========================================
     // NETWORK
-    // ========================================
 
     sendToClient(clientId, data) {
         const client = this.server.clients.get(clientId);

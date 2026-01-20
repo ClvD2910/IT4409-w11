@@ -214,7 +214,7 @@ export class Player extends Entity {
             });
 
         } else {
-            // === RED (VÀ MẶC ĐỊNH): BẮN 1 VIÊN THẲNG ===
+            //  RED (VÀ MẶC ĐỊNH): BẮN 1 VIÊN THẲNG 
             const spawnX = this.x + Math.cos(baseAngle) * spawnDistance;
             const spawnY = this.y + Math.sin(baseAngle) * spawnDistance;
 

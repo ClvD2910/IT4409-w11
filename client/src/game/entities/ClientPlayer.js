@@ -234,7 +234,7 @@ export class ClientPlayer {
 
         // Visibility (Nebula / Invisible)
         const isHidden = data.hi;
-        if (!this.dead) { // <--- THÊM ĐIỀU KIỆN NÀY
+        if (!this.dead) { 
             if (isHidden) {
                 this.isMe ? (this.setAlphaState(0.5), this.setVisibleState(true)) : this.setVisibleState(false);
             } else {
@@ -264,16 +264,13 @@ export class ClientPlayer {
             this.lastIsSpeedUp = data.isSpeedUp;
             this.lastIsHidden = isHidden;
 
-            // Also detection for medkit/ammo refill?
-            // Usually reflected in lives/ammo increase, but might be too spammy.
-            // Let's stick to active effects for now.
+
         }
     }
 
     tick(dt) {
         if (this.dead || !this.container.visible) return;
 
-        // Time-based exponential lerp: catchup speed = 12/s → ~86% caught up in 167ms (one server period at 20Hz=50ms × 3 frames)
         const dx = this.targetX - this.container.x;
         const dy = this.targetY - this.container.y;
         const dist = Math.hypot(dx, dy);
@@ -300,7 +297,7 @@ export class ClientPlayer {
         const rotT = 1 - Math.exp(-20 * dt); // ~86% caught up in 100ms
         this.container.rotation += dAngle * rotT;
 
-        // ✅ THÊM: Sync properties để HUD và các component khác truy cập được
+        // Sync properties để HUD và các component khác truy cập được
         this.x = this.container.x;
         this.y = this.container.y;
 

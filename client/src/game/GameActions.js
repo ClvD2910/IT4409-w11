@@ -1,8 +1,3 @@
-/**
- * GameActions.js
- * Centralized action dispatcher - abstracts game actions from input sources.
- * Both keyboard (PC) and touch (Mobile) inputs call these methods.
- */
 import { socket } from '../network/socket';
 import { PacketType } from 'shared/packetTypes';
 

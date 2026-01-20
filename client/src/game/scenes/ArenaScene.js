@@ -131,7 +131,6 @@ export class ArenaScene extends Phaser.Scene {
         if (myPlayer && myPlayer.container.visible) {
             const weaponType = myPlayer.weaponType || 'BLUE';
 
-            // RED laser có tầm bắn quá lớn -> không vẽ range circle
             if (weaponType === 'RED') {
                 this.rangeCircle.setVisible(false);
                 return;

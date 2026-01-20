@@ -557,6 +557,7 @@ const HomeScreen = ({ user, onPlayClick, onArenaClick, onLogout, onLoginSuccess 
         <div className="home-container">
             {/* Header with login/logout */}
             <div className="home-header">
+                <div className="header-logo">SpaceCraft<span>.io</span></div>
                 {localUser ? (
                     <button className="auth-btn logout-btn" onClick={handleLogout}>Logout</button>
                 ) : (
@@ -567,7 +568,7 @@ const HomeScreen = ({ user, onPlayClick, onArenaClick, onLogout, onLoginSuccess 
             {/* Main Content - only show when menu card is not displayed */}
             {!localUser && (
                 <div className="main-content">
-                    <h1 className="game-title">SHOOTER<span style={{ color: '#FFD700' }}>.IO</span></h1>
+                    <h1 className="game-title">SpaceCraft<span>.io</span></h1>
                     <p className="game-subtitle">Battle Royale Multiplayer</p>
                 </div>
             )}
@@ -1489,12 +1490,6 @@ const HomeScreen = ({ user, onPlayClick, onArenaClick, onLogout, onLoginSuccess 
                     </div>
                 </>
             )}
-
-            {/* Version at bottom left */}
-            <div className="version-text">
-                <div>v1.0.0</div>
-                <div className="developer-text">Developed by Hoa Ngo</div>
-            </div>
 
             {/* Waiting for Response Modal */}
             {waitingForResponse && (
